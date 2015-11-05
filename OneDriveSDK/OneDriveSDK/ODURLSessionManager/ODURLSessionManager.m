@@ -187,6 +187,17 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)redirectResponse
         newRequest:(NSURLRequest *)request
  completionHandler:(void (^)(NSURLRequest *))completionHandler
 {
+    BOOL isBusiness = [task.originalRequest.URL.host containsString:@"-my.sharepoint.com"];
+    if (isBusiness) {
+        NSArray<NSString *> *components = task.originalRequest.URL.pathComponents;
+        NSUInteger count = components.count;
+
+        if ((count > 3) && [components[count - 1] isEqualToString:@"content"] && [components[count - 3] isEqualToString:@"items"]) {
+            completionHandler(request);
+            return;
+        }
+    }
+
     NSMutableURLRequest *newRequest = nil;
     if (request){
         newRequest = [request mutableCopy];

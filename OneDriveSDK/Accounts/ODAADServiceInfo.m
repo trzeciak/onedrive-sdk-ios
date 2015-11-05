@@ -39,7 +39,8 @@
 
 - (NSString *)apiEndpoint
 {
-    return [self.resourceId stringByAppendingPathComponent:@"_api/v2.0/me/"];
+    NSString *optionalSlash = [self.resourceId hasSuffix:@"/"] ? @"" : @"/";
+    return [self.resourceId stringByAppendingFormat:@"%@%@", optionalSlash, @"_api/v2.0/me/"];
 }
 
 - (id <ODAuthProvider>)createAuthProviderWithSession:(id<ODHttpProvider> )session accountStore:(id <ODAccountStore>)accountStore logger:(id <ODLogger>)logger
